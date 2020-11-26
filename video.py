@@ -3,14 +3,43 @@ import glob
 import shutil
 from shutil import copyfile
 import sys
-from colorama import Fore, Back, Style
+from colorama import Fore, Back, Style, init
 import time
 import VIDEO_FILES.parse as VidParser
 
 
-
+init(strip=False)
 audio_file = input("What is the audio file called? (ex: audio.wav)  ")
+audio_extension = audio_file[-4:]
+if (audio_extension != ".wav"):
+    if (audio_file[-4] == "."):
+        print(Fore.RED + "The audio file must be a .wav file")
+        print(Style.RESET_ALL)
+        sys.exit()
+    else:
+        print(Fore.RED + "Please include the extension \".wav\" at the end of your file.")
+        print(Style.RESET_ALL)
+        sys.exit()
+if (os.path.exists("data/" + audio_file) == False):
+    print(Fore.RED + "Audio file does not exist")
+    print(Style.RESET_ALL)
+    sys.exit()
+    
 transcript_file = input("What is the transcript file called? (ex: transcript.txt)  ")
+transcript_extension = transcript_file[-4:]
+if (audio_extension != ".txt"):
+    if (audio_file[-4] == "."):
+        print(Fore.RED + "The transcript file must be a .txt file")
+        print(Style.RESET_ALL)
+        sys.exit()
+    else:
+        print(Fore.RED + "Please include the extension \".txt\" at the end of your file.")
+        print(Style.RESET_ALL)
+        sys.exit()
+if (os.path.exists("data/" + audio_file) == False):
+    print(Fore.RED + "Transcript file does not exist")
+    print(Style.RESET_ALL)
+    sys.exit()
 
 #==========================================================================================
 #LIP SYNC ALIGNMENT
