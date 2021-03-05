@@ -11,19 +11,20 @@ from colorama import init, Fore, Back, Style
 def parse():
 
     data_filename = 'info.txt'
+    
     headers = 'Min Time', 'Tier', 'Text', 'Max Time'  # Column names.
-
+    
     pose_table = []
     transcript_pose_table = []
 
+
+    #==CONVERT DATA INTO VIEWABLE TABLESET==
     # Read the data from file into a list-of-lists table.
     with open(data_filename) as file:  
         datatable = [line.split() for line in file.read().splitlines()]
-
     # Find the longest data value or header to be printed in each column.
     widths = [max(len(value) for value in col)
                 for col in zip(*(datatable + [headers]))]
-
     i = 0
     while i < len(datatable):
         if "words" in datatable[i]:
@@ -36,20 +37,21 @@ def parse():
             datatable.pop(i)
         
         i += 1
-
     print("\n")
-
     # Print heading followed by the data in datatable.
     # (Uses '>' to right-justify the data in some columns.)
     format_spec = '{:{widths[0]}}  {:>{widths[1]}}  {:>{widths[2]}}  {:>{widths[3]}}'
     print(format_spec.format(*headers, widths=widths))
     for fields in datatable:
         print(format_spec.format(*fields, widths=widths))
+    #=======================================
 
 
 
+    #==POSE TABLE CREATION==
     with open('transcript.txt') as infile:
         for line in infile:
+            #find markers <> to define pose
             transcript_pose_table.append(re.search('\<(.*)\>', line).group(1))
 
     p = 0
@@ -57,23 +59,18 @@ def parse():
         pose_table[p][2] = transcript_pose_table[p]
         p += 1
 
-
-
     print("\n")
     for fields2 in pose_table:
         print(format_spec.format(*fields2, widths=widths))
-
+    #======================
+    
+    
+    #==POSE AND PHONEME TABLE FILLING==
     i = 0
     j = 0
     u = 0
-
-
-
-    u = 0
     pose_table.insert(0, [pose_table[u][0], pose_table[u][1], pose_table[u][2], pose_table[u][3]])
-
-    fix = 1
-
+    
     phoneme_frames = []
 
     while i < len(datatable):
@@ -93,15 +90,13 @@ def parse():
                 j += 1
             else:
                 keyframe += (1)
-            
         i += 1
-
-
+    #==================================
+        
+    
+    
+    #==FRAME CREATION==
     k = 0
-
-
-
-
     print(Fore.BLUE + "Starting image output")
     for i in progressbar(range(len(phoneme_frames))):
         try:
@@ -113,7 +108,7 @@ def parse():
             d = ImageDraw.Draw(img)
             
             
-            
+            #mouth selection
             if (phoneme_frames[k][1]) in ['sil', 'sp', 'M', 'N', 'NG', 'P']:
                 pose_path = ".\\chibidusk\\mouths\\1.png"
             if (phoneme_frames[k][1]) in ['AA0', 'AA1', 'AA2', 'AO0', 'AO1', 'AO2']:
@@ -146,12 +141,7 @@ def parse():
             current_anim_pose = (".\\chibidusk\\" + (phoneme_frames[k][2])[1:] + ".png")
             pose = Image.open(current_anim_pose, 'r')
             
-            
-            
-            #fnt = ImageFont.load_default()
-            #d.text((300,450), phoneme_frames[k][1], font=fnt) 
-            #d.text((500,450), phoneme_frames[k][2], font=fnt)
-            #print((phoneme_frames[k][2])[1:])
+            #mouth placement
             img.paste(pose, (220, 220), mask=pose)
             if ((phoneme_frames[k][2])[1:] == "idle"):
                 img.paste(mouth, (470,400), mask=mouth)
@@ -160,18 +150,30 @@ def parse():
             if ((phoneme_frames[k][2])[1:] == "wave"):
                 img.paste(mouth, (465,400), mask=mouth)
             
-            #time.sleep(1)
             
             img.save('frame_' + str(k) + '.png')
             k += 1
+            
+            
+            
         except Exception as e:
             print("List Ended with error " + str(e))
             k = len(phoneme_frames) + 10
+            
     print(Style.RESET_ALL)
+    #==================
+    
+    
+    #==VIDEO BUILDING==
     os.system('ffmpeg -y -r 100 -f image2 -s 600x900 -i "frame_%d.png" -i transcript.wav -pix_fmt yuv420p test.mp4')
-
+    #==================
+    
+    
+    
+    #==FILE CLEANUP==
     filelist = [ f for f in os.listdir(r'C:\Users\Dusk\Desktop\AutoVideoEditor\VIDEO_FILES') if f.endswith(".png") ]
     for f in filelist:
         os.remove(os.path.join(r'C:\Users\Dusk\Desktop\AutoVideoEditor\VIDEO_FILES', f))
     os.system('ffmpeg -y -i test.mp4 -r 30 synced.mp4')
     os.remove(r'test.mp4')
+    #================
