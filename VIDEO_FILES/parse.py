@@ -7,20 +7,20 @@ import re
 from progressbar import progressbar
 from colorama import init, Fore, Back, Style
 
-
+init(autoreset=True)
 def parse():
 
     data_filename = 'info.txt'
-    
+
     headers = 'Min Time', 'Tier', 'Text', 'Max Time'  # Column names.
-    
+
     pose_table = []
     transcript_pose_table = []
 
 
     #==CONVERT DATA INTO VIEWABLE TABLESET==
     # Read the data from file into a list-of-lists table.
-    with open(data_filename) as file:  
+    with open(data_filename) as file:
         datatable = [line.split() for line in file.read().splitlines()]
     # Find the longest data value or header to be printed in each column.
     widths = [max(len(value) for value in col)
@@ -35,7 +35,7 @@ def parse():
                 datatable.pop(i)
         elif "tier" in datatable[i]:
             datatable.pop(i)
-        
+
         i += 1
     print("\n")
     # Print heading followed by the data in datatable.
@@ -63,14 +63,14 @@ def parse():
     for fields2 in pose_table:
         print(format_spec.format(*fields2, widths=widths))
     #======================
-    
-    
+
+
     #==POSE AND PHONEME TABLE FILLING==
     i = 0
     j = 0
     u = 0
     pose_table.insert(0, [pose_table[u][0], pose_table[u][1], pose_table[u][2], pose_table[u][3]])
-    
+
     phoneme_frames = []
 
     while i < len(datatable):
@@ -92,22 +92,22 @@ def parse():
                 keyframe += (1)
         i += 1
     #==================================
-        
-    
-    
+
+
+
     #==FRAME CREATION==
     k = 0
     print(Fore.BLUE + "Starting image output")
-    for i in progressbar(range(len(phoneme_frames))):
+    for i in range(len(phoneme_frames)):
         try:
             #print(phoneme_frames[k])
-            
-            
+
+
             #WRITING IMAGE
             img = Image.new('RGBA', (1280, 720), color = (255, 255, 255, 0))
             d = ImageDraw.Draw(img)
-            
-            
+
+
             #mouth selection
             if (phoneme_frames[k][1]) in ['sil', 'sp', 'M', 'N', 'NG', 'P']:
                 pose_path = ".\\chibidusk\\mouths\\1.png"
@@ -135,12 +135,12 @@ def parse():
                 pose_path = ".\\chibidusk\\mouths\\18.png"
             if (phoneme_frames[k][1]) in ['TH', 'L']:
                 pose_path = ".\\chibidusk\\mouths\\19.png"
-            
-           
+
+
             mouth = Image.open(pose_path, 'r')
             current_anim_pose = (".\\chibidusk\\" + (phoneme_frames[k][2])[1:] + ".png")
             pose = Image.open(current_anim_pose, 'r')
-            
+
             #mouth placement
             img.paste(pose, (220, 220), mask=pose)
             if ((phoneme_frames[k][2])[1:] == "idle"):
@@ -149,31 +149,31 @@ def parse():
                 img.paste(mouth, (470,405), mask=mouth)
             if ((phoneme_frames[k][2])[1:] == "wave"):
                 img.paste(mouth, (465,400), mask=mouth)
-            
-            
+
+
             img.save('frame_' + str(k) + '.png')
             k += 1
-            
-            
-            
+
+
+
         except Exception as e:
             print("List Ended with error " + str(e))
             k = len(phoneme_frames) + 10
-            
+
     print(Style.RESET_ALL)
     #==================
-    
-    
+
+
     #==VIDEO BUILDING==
     os.system('ffmpeg -y -r 100 -f image2 -s 600x900 -i "frame_%d.png" -i transcript.wav -pix_fmt yuv420p test.mp4')
     #==================
-    
-    
-    
+
+
+
     #==FILE CLEANUP==
-    filelist = [ f for f in os.listdir(r'C:\Users\Dusk\Desktop\AutoVideoEditor\VIDEO_FILES') if f.endswith(".png") ]
+    filelist = [ f for f in os.listdir(os.getcwd()) if f.endswith(".png") ]
     for f in filelist:
-        os.remove(os.path.join(r'C:\Users\Dusk\Desktop\AutoVideoEditor\VIDEO_FILES', f))
+        os.remove(os.path.join(os.getcwd(), f))
     os.system('ffmpeg -y -i test.mp4 -r 30 synced.mp4')
     os.remove(r'test.mp4')
     #================

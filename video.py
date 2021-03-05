@@ -26,6 +26,7 @@ while(audio_given == False):
             if (os.path.exists("data/" + audio_file + ".wav") == False):
                 print(Fore.RED + "ERROR: Audio file " + audio_file + ".wav does not exist")
             else:
+                audio_file += ".wav"
                 audio_given = True
     elif (os.path.exists("data/" + audio_file) == False):
         print(Fore.RED + "ERROR: Audio file " + audio_file + " does not exist")
@@ -41,7 +42,7 @@ transcript_given = False
 while(transcript_given == False):
     transcript_file = input("What is the transcript file called? (ex: transcript.txt)  ")
     transcript_extension = transcript_file[-4:]
-    
+
     if (transcript_extension != ".txt"):
         if ("." in transcript_file):
             print(Fore.RED + "ERROR: The transcript file must be a .txt file")
@@ -49,6 +50,7 @@ while(transcript_given == False):
             if (os.path.exists("data/" + transcript_file + ".txt") == False):
                 print(Fore.RED + "ERROR: Transcript file " + transcript_file + ".txt does not exist")
             else:
+                transcript_file += ".txt"
                 transcript_given = True
     elif (os.path.exists("data/" + transcript_file) == False):
         print(Fore.RED + "ERROR: Transcript file " + transcript_file + " does not exist")
@@ -100,7 +102,7 @@ try:
         f.write("Read from file: \"" + TextFileFound[0] + "\"\n")
         f.write("selectObject: \"TextGrid " + fileName[:-9] + "\"\n")
         f.write("newList$ = List: \"no\", 3, \"yes\", \"no\"\n")
-        f.write("writeFile: \"C:\\Users\\Dusk\\Desktop\\AutoVideoEditor\\aligned\\data\\info.txt\", newList$\n")
+        f.write("writeFile: \"" + os.getcwd() + "\\aligned\\data\\info.txt\", newList$\n")
         f.close()
 
     print("Making info.txt")
@@ -169,9 +171,7 @@ try:
     os.remove(transcript_file)
     os.chdir("..")
     shutil.rmtree("aligned")
-    os.mkdir("aligned")
     shutil.move("VIDEO_FILES//synced.mp4", os.getcwd())
-except:
-    print(Fore.RED + "ERROR: Loose file cleanup unsuccessful"
+except Exception as e:
+    print(Fore.RED + "ERROR: Loose file cleanup unsuccessful" + str(e))
 #==========================================
-
