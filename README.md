@@ -35,6 +35,11 @@ This will show you how to get started with this project locally.
   Pillow >= 8.4.0
   ```
 
+### Included requirements
+
+* Praat (6.1.24) with SendPraat.exe (required for running commands)
+* Montreal Forced Aligner with english detection libraries
+
 ### Installation
 
 1. Clone the repo
