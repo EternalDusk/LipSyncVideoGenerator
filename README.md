@@ -9,9 +9,9 @@
   <p align="center">
     Automate the creation of lip synced characters easily utilizing only a transcript and an audio file!
     <br />
-    <a href="https://github.com/github_username/repo_name/issues">Report Bugs and Issues</a>
+    <a href="https://github.com/EternalDusk/LipSyncVideoGenerator/issues">Report Bugs and Issues</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/EternalDusk/LipSyncVideoGenerator/issues">Request Feature</a>
   </p>
 </div>
 
@@ -44,7 +44,7 @@ This will show you how to get started with this project locally.
 
 1. Clone the repo
    ```sh
-   git clone https://https://github.com/EternalDusk/AutoVideoGenerator.git
+   git clone https://https://github.com/EternalDusk/LipSyncVideoGenerator.git
    ```
 2. Install required libraries
    ```
@@ -165,7 +165,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Tyler Wiseman - [@duskwiseman](https://twitter.com/duskwiseman) - wiseman.tyler.co@gmail.com
 
-Project Link: [https://github.com/EternalDusk/AutoVideoGenerator](https://github.com/EternalDusk/AutoVideoGenerator)
+Project Link: [https://github.com/EternalDusk/LipSyncVideoGenerator](https://github.com/EternalDusk/LipSyncVideoGenerator)
 
 
 
