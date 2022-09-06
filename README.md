@@ -37,8 +37,8 @@ This will show you how to get started with this project locally.
 
 ### Included requirements
 
-* Praat (6.1.24) with SendPraat.exe (required for running commands)
-* Montreal Forced Aligner with english detection libraries
+* [Praat](https://www.fon.hum.uva.nl/praat/) (6.1.24) with SendPraat.exe (required for running commands)
+* [Montreal Forced Aligner](https://montreal-forced-aligner.readthedocs.io/en/latest/) with english detection libraries
 
 ### Installation
 
